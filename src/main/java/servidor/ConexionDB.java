@@ -9,6 +9,7 @@ public class ConexionDB {
     private static final String USUARIO_DB = "pichichi"; // Ajusta tu usuario
     private static final String CONTRASEÑA_DB = "123456789"; // Ajusta tu contraseña
 
+
     public static Connection conectar() {
         try {
             // Registrar el driver de MySQL manualmente
