@@ -10,7 +10,7 @@ public class ConexionDB {
     private static final String CONTRASEÑA_DB = "123456789"; // Ajusta tu contraseña
 
 
-    public static Connection conectar() {
+    public static Connection conectar() throws SQLException {
         try {
             // Registrar el driver de MySQL manualmente
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -27,4 +27,15 @@ public class ConexionDB {
             return null;
         }
     }
+
+    public static Connection getConnection() {
+        try {
+            return DriverManager.getConnection(URL_DB, USUARIO_DB, CONTRASEÑA_DB);
+        } catch (SQLException e) {
+            e.printStackTrace(); // Muestra el error en la consola
+            return null; // Devuelve null si falla la conexión
+        }
+    }
 }
+
+
