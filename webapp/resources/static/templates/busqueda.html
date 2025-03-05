@@ -1,20 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>NoHayDosSinTres - Buscar un Invitado</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-    <header>
-        <h1>Buscar un Invitado</h1>
-    </header>
-    <button id="btnObtenerUsuarios">Obtener Usuarios</button>
-    <div id="listaUsuarios"></div>
+<header>
+    <h1>Buscar un Invitado</h1>
+</header>
 
-    <!-- Enlace al archivo JavaScript -->
-    <script src="static/js/obtenerUsuarios.js" defer></script>
-    <br>
-    <a href="../index.html" class="btn btn-secondary">Volver al Índice</a>
+<!-- Formulario para buscar un usuario por ID -->
+<form id="formBuscar">
+    <label for="idBuscar">ID del Invitado:</label>
+    <input type="text" id="idBuscar" name="idBuscar" required>
+    <button type="submit">Buscar</button>
+</form>
+
+<!-- Resultado de la búsqueda -->
+<div id="resultadoBusqueda"></div>
+
+<!-- Enlace al archivo JavaScript -->
+<script src="/js/ObtenerUsuarios.js" defer></script>
+
+<br>
+<a href="../index.html" class="btn btn-secondary">Volver al Índice</a>
 </body>
 </html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,35 +7,29 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-    <h1>Lista de Invitados</h1>
+<div class="container mt-4">
+    <h1 class="text-center">Lista de Invitados</h1>
 
-    <table class="table table-striped mt-3">
+    <!-- Botón para obtener la lista de usuarios -->
+    <button id="btnObtenerUsuarios" class="btn btn-primary mb-3">Cargar Usuarios</button>
+
+    <!-- Tabla para mostrar los usuarios -->
+    <table class="table table-striped">
         <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Apellidos</th>
-                <th>Edad</th>
-                <th>Correo Electrónico</th>
-                <th>Fecha de Nacimiento</th>
-            </tr>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+        </tr>
         </thead>
-        <tbody>
-            <tr>
-                <td>Carlos</td>
-                <td>Jiménez</td>
-                <td>25</td>
-                <td>carlosjmn@mail.com</td>
-                <td>1995-10-10</td>
-            </tr>
-            <tr>
-                <td>María</td>
-                <td>García</td>
-                <td>30</td>
-                <td>maria.gar@mail.com</td>
-                <td>1990-05-15</td>
-            </tr>
+        <tbody id="tablaUsuarios">
+        <!-- Aquí se insertarán los usuarios dinámicamente -->
         </tbody>
     </table>
+
     <a href="../index.html" class="btn btn-secondary">Volver al Índice</a>
+</div>
+
+<!-- Enlace al archivo JavaScript -->
+<script src="/js/ListarUsuarios.js" defer></script>
 </body>
 </html>

@@ -5,16 +5,20 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 @WebServlet("/FormularioServlet")
 public class FormularioServlet extends HttpServlet {
+
+    // 📌 Método para registrar un usuario (POST)
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -55,6 +59,93 @@ public class FormularioServlet extends HttpServlet {
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("{\"error\": \"Error en la base de datos\"}");
+        }
+    }
+
+    //Método para mostrar todos los usuarios (GET)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        String idStr = request.getParameter("id");
+
+        try (Connection con = ConexionDB.getConnection()) {
+            if (idStr != null && !idStr.trim().isEmpty()) {
+                // 🔹 Buscar un usuario por ID
+                String sql = "SELECT * FROM usuarios WHERE ID = ?";
+                PreparedStatement ps = con.prepareStatement(sql);
+                ps.setInt(1, Integer.parseInt(idStr));
+                ResultSet rs = ps.executeQuery();
+
+                if (rs.next()) {
+                    JSONObject usuario = new JSONObject();
+                    usuario.put("id", rs.getInt("ID"));
+                    usuario.put("nombre", rs.getString("Nombre"));
+
+                    System.out.println("🔍 Usuario encontrado: " + usuario.toString());
+                    response.getWriter().write(usuario.toString());
+
+                } else {
+                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                    response.getWriter().write("{\"error\": \"Usuario no encontrado\"}");
+                    System.out.println("⚠ Usuario con ID " + idStr + " no encontrado.");
+                }
+
+            } else {
+                // 🔹 Obtener todos los usuarios
+                JSONArray usuariosArray = new JSONArray();
+                String sql = "SELECT * FROM usuarios";
+                PreparedStatement ps = con.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery();
+
+                while (rs.next()) {
+                    JSONObject usuario = new JSONObject();
+                    usuario.put("id", rs.getInt("ID"));
+                    usuario.put("nombre", rs.getString("Nombre"));
+                    usuariosArray.put(usuario);
+                }
+
+                System.out.println("🔍 Lista de usuarios enviada.");
+                response.getWriter().write(usuariosArray.toString());
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("{\"error\": \"Error al obtener usuarios\"}");
+        }
+    }
+    //Método para eliminar un usuario por ID (DELETE)
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        String idStr = request.getParameter("id");
+        if (idStr == null || idStr.trim().isEmpty()) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("{\"error\": \"Se requiere un ID para eliminar\"}");
+            return;
+        }
+
+        try (Connection con = ConexionDB.getConnection()) {
+            String sql = "DELETE FROM usuarios WHERE ID = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, Integer.parseInt(idStr));
+            int filasAfectadas = ps.executeUpdate();
+
+            JSONObject jsonResponse = new JSONObject();
+            if (filasAfectadas > 0) {
+                jsonResponse.put("mensaje", "Usuario eliminado correctamente.");
+            } else {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                jsonResponse.put("error", "Usuario no encontrado.");
+            }
+            response.getWriter().write(jsonResponse.toString());
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("{\"error\": \"Error al eliminar el usuario\"}");
         }
     }
 }

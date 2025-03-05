@@ -1,35 +1,59 @@
-async function obtenerUsuarios(event) {
+// 📌 Función para buscar un usuario por ID
+async function buscarUsuario(event) {
     event.preventDefault(); // Evita la recarga de la página
 
+    let id = document.getElementById("idBuscar").value;
+    if (id.trim() === "") {
+        alert("Por favor, ingresa un ID válido.");
+        return;
+    }
+
     try {
-        let respuesta = await fetch("/api/getUsers", {
+        let respuesta = await fetch(`/FormularioServlet?id=${id}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" }
         });
 
-        let usuarios = await respuesta.json();
-        let listaUsuarios = document.getElementById("listaUsuarios");
-        listaUsuarios.innerHTML = "";
+        // 🔹 Verificar si la respuesta es exitosa
+        if (!respuesta.ok) {
+            throw new Error(`HTTP error! Status: ${respuesta.status}`);
+        }
 
-        if (usuarios.length === 0) {
-            listaUsuarios.innerHTML = "<p>No hay usuarios registrados.</p>";
+        let resultadoTexto = await respuesta.text();
+        console.log("🔍 Respuesta obtenida (RAW):", resultadoTexto); // 🔹 Ver respuesta antes de parsearla
+
+        let usuario;
+        try {
+            usuario = JSON.parse(resultadoTexto);
+            console.log("🔍 Usuario parseado:", usuario);
+        } catch (error) {
+            console.error("Error al convertir JSON:", error);
+            alert("Error en la respuesta del servidor. Verifica la consola.");
             return;
         }
 
-        let ul = document.createElement("ul");
-        usuarios.forEach(usuario => {
-            let li = document.createElement("li");
-            li.textContent = usuario.nombre;
-            ul.appendChild(li);
-        });
-        listaUsuarios.appendChild(ul);
+        let resultadoBusqueda = document.getElementById("resultadoBusqueda");
+
+        if (usuario.error) {
+            resultadoBusqueda.innerHTML = `<p style="color:red;">${usuario.error}</p>`;
+        } else {
+            resultadoBusqueda.innerHTML = `
+                <div class="alert alert-success">
+                    <strong>ID:</strong> ${usuario.id} <br>
+                    <strong>Nombre:</strong> ${usuario.nombre}
+                </div>`;
+        }
+
     } catch (error) {
-        console.error("Error en la solicitud:", error);
-        alert("Hubo un problema al obtener la lista de usuarios.");
+        console.error("Error en buscarUsuario():", error);
+        alert("Hubo un problema al buscar el usuario.");
     }
 }
 
-// Asegurar que el script se ejecuta después de que se cargue el DOM
+// 📌 Asegurar que el evento de búsqueda se registre correctamente
 document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("btnObtenerUsuarios").addEventListener("click", obtenerUsuarios);
+    let formBuscar = document.getElementById("formBuscar");
+    if (formBuscar) {
+        formBuscar.addEventListener("submit", buscarUsuario);
+    }
 });
