@@ -1,6 +1,7 @@
 package servidor;
 
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
@@ -10,21 +11,28 @@ public class Servidor {
         // Crear el servidor en el puerto 8080
         Server server = new Server(8080);
 
-        // Configurar los servlets
+        // Configurar el contexto del servidor
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.setContextPath("/");
-        server.setHandler(context);
 
-        // Registrar el servlet del formulario
+        // 📌 Configurar Jetty para servir archivos desde `webapp/resources/static/`
+        context.setResourceBase("webapp/resources/static");
+        context.addServlet(DefaultServlet.class, "/");
+
+        // Registrar los servlets de la aplicación
         context.addServlet(new ServletHolder(new FormularioServlet()), "/formulario");
+
+        // Asignar el contexto al servidor
+        server.setHandler(context);
 
         try {
             // Iniciar el servidor
             server.start();
-            System.out.println("Servidor iniciado en http://localhost:8080");
+            System.out.println("🚀 Servidor iniciado en http://localhost:8080");
             server.join();
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("❌ Error al iniciar el servidor.");
         }
     }
 }
