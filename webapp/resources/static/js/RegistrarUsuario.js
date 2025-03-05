@@ -5,19 +5,24 @@ async function registrarUsuario(event) {
     if (nombre.trim() === "") {
         alert("Por favor, ingresa un nombre válido.");
         return;
+
     }
 
     let datos = { nombre: nombre };
 
     try {
-        let respuesta = await fetch("/api/registerUser", {
+        let respuesta = await fetch("/FormularioServlet", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(datos)
         });
 
         let resultado = await respuesta.json();
-        alert(resultado.mensaje || "Usuario registrado correctamente.");
+        if (resultado.error) {
+            alert("Error: " + resultado.error);
+        } else {
+            alert(resultado.mensaje || "Usuario registrado correctamente.");
+        }
     } catch (error) {
         console.error("Error en la solicitud:", error);
         alert("Hubo un problema al registrar el usuario.");
