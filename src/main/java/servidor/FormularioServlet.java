@@ -38,7 +38,7 @@ public class FormularioServlet extends HttpServlet {
 
         // Insertar en la base de datos
         try (Connection con = ConexionDB.getConnection()) {
-            String sql = "INSERT INTO invitados (Nombre) VALUES (?)";
+            String sql = "INSERT INTO usuarios (Nombre) VALUES (?)";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, nombre);
             int filasAfectadas = ps.executeUpdate();
