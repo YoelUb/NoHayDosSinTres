@@ -66,16 +66,17 @@
         </dependency>
 
     </dependencies>
-
     <build>
         <plugins>
-            <!-- Plugin de Maven para empaquetar el proyecto como WAR -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.3.1</version>
                 <configuration>
                     <warName>NoHayDosSinTres</warName>
+                    <manifestEntries>
+                        <Main-Class>servidor.Main</Main-Class> <!-- Clase principal de tu aplicación -->
+                    </manifestEntries>
                 </configuration>
             </plugin>
         </plugins>
