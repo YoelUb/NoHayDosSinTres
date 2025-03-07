@@ -5,8 +5,7 @@ COPY . /app
 RUN mvn clean package
 
 # Etapa final con Jetty
-FROM jetty:11
-WORKDIR /var/lib/jetty/webapps
+FROM jetty:11-jre11
 COPY --from=build /app/target/*.war /var/lib/jetty/webapps/ROOT.war
 
 EXPOSE 8080
