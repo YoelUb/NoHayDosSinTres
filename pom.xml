@@ -20,6 +20,7 @@
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
             <version>11.0.7</version>
+
         </dependency>
 
         <!-- Dependencia de Jetty Servlet -->
@@ -49,6 +50,7 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.33</version>
+            <scope>runtime</scope>
         </dependency>
 
         <!-- Dependencia de JUnit para pruebas -->

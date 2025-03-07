@@ -5,7 +5,6 @@ async function registrarUsuario(event) {
     if (nombre.trim() === "") {
         alert("Por favor, ingresa un nombre válido.");
         return;
-
     }
 
     let datos = { nombre: nombre };
@@ -17,12 +16,22 @@ async function registrarUsuario(event) {
             body: JSON.stringify(datos)
         });
 
-        let resultado = await respuesta.json();
-        if (resultado.error) {
-            alert("Error: " + resultado.error);
-        } else {
-            alert(resultado.mensaje || "Usuario registrado correctamente.");
+        let contentType = respuesta.headers.get("content-type");
+
+        if (!respuesta.ok) {
+            throw new Error(`Error ${respuesta.status}: ${respuesta.statusText}`);
         }
+
+        // Si la respuesta es JSON, la parseamos
+        if (contentType && contentType.includes("application/json")) {
+            let resultado = await respuesta.json();
+            alert(resultado.mensaje || "Usuario registrado correctamente.");
+        } else {
+            let texto = await respuesta.text();
+            console.error("Respuesta no esperada:", texto);
+            alert("Error inesperado en el servidor.");
+        }
+
     } catch (error) {
         console.error("Error en la solicitud:", error);
         alert("Hubo un problema al registrar el usuario.");
