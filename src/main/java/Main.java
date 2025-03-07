@@ -8,12 +8,8 @@ public class Main {
     public static void main(String[] args) throws SQLException {
 
 
-        Connection conexion = ConexionDB.conectar();
-        if (conexion != null) {
-            System.out.println("La conexión fue exitosa.");
-        } else {
-            System.out.println("Error en la conexión.");
-        }
+        ConexionDB.conectar();
+
 
         // Iniciar el servidor
         try {
@@ -23,8 +19,6 @@ public class Main {
             e.printStackTrace();
             System.out.println("Error al iniciar el servidor.");
         }
-
-
 
     }
 }
