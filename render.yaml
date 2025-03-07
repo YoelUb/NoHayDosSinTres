@@ -6,4 +6,6 @@ services:
       - key: PORT
         value: 10000
     buildCommand: "mvn clean package"
-startCommand: "java -cp target/NoHayDosSinTres-1.0-SNAPSHOT/WEB-INF/classes:target/NoHayDosSinTres-1.0-SNAPSHOT/WEB-INF/lib/* servidor.Servidor"
+startCommand: >
+  unzip -o target/NoHayDosSinTres-1.0-SNAPSHOT.war -d app &&
+  java -cp "app/WEB-INF/classes:app/WEB-INF/lib/*" servidor.Servidor
