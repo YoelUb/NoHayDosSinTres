@@ -58,6 +58,13 @@
             <version>4.13.1</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>io.github.cdimascio</groupId>
+            <artifactId>java-dotenv</artifactId>
+            <version>5.2.2</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -69,20 +76,10 @@
                 <version>3.3.1</version>
                 <configuration>
                     <warName>NoHayDosSinTres</warName>
-                </configuration>
-            </plugin>
-
-            <!-- Plugin para añadir el Main-Class en el MANIFEST.MF -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.0</version>
-                <configuration>
-                    <archive>
-                        <manifestEntries>
-                            <Main-Class>servidor.Servidor</Main-Class>
-                        </manifestEntries>
-                    </archive>
+                    <manifestEntries>
+                        <!-- Añadimos el atributo Main-Class -->
+                        <Main-Class>servidor.Servidor</Main-Class>
+                    </manifestEntries>
                 </configuration>
             </plugin>
         </plugins>
