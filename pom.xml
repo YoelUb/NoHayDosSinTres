@@ -1,58 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.nohaydos</groupId>
-    <artifactId>mi-aplicacion</artifactId>
+    <groupId>servidor</groupId>
+    <artifactId>NoHayDosSinTres</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
     <dependencies>
-        <!-- Dependencia para Servlets -->
+        <!-- Dependencia de Jetty Server -->
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>11.0.7</version>
+        </dependency>
+
+        <!-- Dependencia de Jetty Servlet -->
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlet</artifactId>
+            <version>11.0.7</version>
+        </dependency>
+
+        <!-- Dependencia de Jakarta Servlet -->
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
             <version>5.0.0</version>
-            <scope>compile</scope> <!-- Cambiado de 'provided' a 'compile' -->
+            <scope>provided</scope>
         </dependency>
 
-        <!-- Jetty para Servlets -->
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-webapp</artifactId>
-            <version>9.4.44.v20210927</version>
-        </dependency>
-
-        <!-- Dependencia JSON -->
+        <!-- Dependencia de JSON -->
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>20231013</version>
+            <version>20210307</version>
         </dependency>
 
-        <!-- Conector MySQL -->
+        <!-- Dependencia de MySQL Connector -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.33</version>
         </dependency>
+
+        <!-- Dependencia de JUnit para pruebas -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.1</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <!-- Plugin de Maven para compilar WAR -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.3.1</version>
                 <configuration>
-                    <source>17</source>
-                    <target>17</target>
+                    <warName>NoHayDosSinTres</warName>
                 </configuration>
             </plugin>
         </plugins>

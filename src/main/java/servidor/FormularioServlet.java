@@ -41,7 +41,7 @@ public class FormularioServlet extends HttpServlet {
         }
 
         // Insertar en la base de datos
-        try (Connection con = ConexionDB.getConnection()) {
+        try (Connection con = ConexionDB.conectar()) {
             String sql = "INSERT INTO usuarios (Nombre) VALUES (?)";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, nombre);
@@ -62,14 +62,14 @@ public class FormularioServlet extends HttpServlet {
         }
     }
 
-    //Método para mostrar todos los usuarios (GET)
+    // Método para mostrar todos los usuarios (GET)
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
         String idStr = request.getParameter("id");
 
-        try (Connection con = ConexionDB.getConnection()) {
+        try (Connection con = ConexionDB.conectar()) {
             if (idStr != null && !idStr.trim().isEmpty()) {
                 // 🔹 Buscar un usuario por ID
                 String sql = "SELECT * FROM usuarios WHERE ID = ?";
@@ -115,7 +115,8 @@ public class FormularioServlet extends HttpServlet {
             response.getWriter().write("{\"error\": \"Error al obtener usuarios\"}");
         }
     }
-    //Método para eliminar un usuario por ID (DELETE)
+
+    // Método para eliminar un usuario por ID (DELETE)
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -127,7 +128,7 @@ public class FormularioServlet extends HttpServlet {
             return;
         }
 
-        try (Connection con = ConexionDB.getConnection()) {
+        try (Connection con = ConexionDB.conectar()) {
             String sql = "DELETE FROM usuarios WHERE ID = ?";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, Integer.parseInt(idStr));
