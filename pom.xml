@@ -76,10 +76,6 @@
                 <version>3.3.1</version>
                 <configuration>
                     <warName>NoHayDosSinTres</warName>
-                    <manifestEntries>
-                        <!-- Añadimos el atributo Main-Class -->
-                        <Main-Class>servidor.Servidor</Main-Class>
-                    </manifestEntries>
                 </configuration>
             </plugin>
         </plugins>
