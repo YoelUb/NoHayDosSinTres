@@ -7,10 +7,10 @@ services:
         value: 10000
     buildCommand: "mvn clean package"
 startCommand: >
-  unzip -o target/NoHayDosSinTres-1.0-SNAPSHOT.war -d app &&
-  echo "=== LISTADO DE ARCHIVOS EN RENDER ===" &&
+  unzip -o app/app.war -d app &&
+  echo "=== LISTADO DE ARCHIVOS ===" &&
   ls -R app/WEB-INF/classes &&
-  echo "=== LISTADO DE LIBRERÍAS EN RENDER ===" &&
+  echo "=== LISTADO DE LIBRERÍAS ===" &&
   ls -R app/WEB-INF/lib &&
   echo "=== INTENTANDO EJECUTAR EL SERVIDOR ===" &&
   java -cp "app/WEB-INF/classes:app/WEB-INF/lib/*" servidor.Servidor

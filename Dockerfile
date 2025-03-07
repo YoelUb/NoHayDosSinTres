@@ -4,9 +4,10 @@ WORKDIR /app
 COPY . /app
 RUN mvn clean package
 
-# Etapa final con Java 21
-FROM eclipse-temurin:21-jdk
-WORKDIR /app
-COPY --from=build /app/target/*.war /app/app.war
+# Etapa final con Jetty
+FROM jetty:11
+WORKDIR /var/lib/jetty/webapps
+COPY --from=build /app/target/*.war /var/lib/jetty/webapps/ROOT.war
+
 EXPOSE 8080
-CMD ["java", "-jar", "/app/app.war"]
+CMD ["java", "-jar", "/usr/local/jetty/start.jar"]
