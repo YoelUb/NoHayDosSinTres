@@ -7,7 +7,9 @@ RUN mvn clean package
 # Etapa final con Jetty
 FROM jetty:11-jre11
 COPY --from=build /app/target/*.war /var/lib/jetty/webapps/ROOT.war
-COPY src/main/webapp/resources/static/ /var/lib/jetty/webapps/static/
+
+# Copiar archivos estáticos desde la carpeta correcta
+COPY src/main/webapp/static/ /var/lib/jetty/webapps/ROOT/static/
+
 EXPOSE 8080
 CMD ["java", "-jar", "/usr/local/jetty/start.jar"]
-
