@@ -13,3 +13,4 @@ COPY src/main/webapp/static/ /var/lib/jetty/webapps/ROOT/static/
 
 EXPOSE 8080
 CMD ["java", "-jar", "/usr/local/jetty/start.jar"]
+
