@@ -68,28 +68,22 @@
     </dependencies>
     <build>
         <plugins>
+            <!-- Plugin para generar el WAR con Main-Class -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.3.1</version>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
-                </configuration>
-            </plugin>
-
-            <!-- Plugin para empaquetar una aplicación ejecutable -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.0</version>
-                <configuration>
                     <archive>
-                        <manifest>
-                            <mainClass>servidor.Servidor</mainClass>
-                        </manifest>
+                        <manifestEntries>
+                            <Main-Class>servidor.Servidor</Main-Class>
+                        </manifestEntries>
                     </archive>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
+
 </project>
