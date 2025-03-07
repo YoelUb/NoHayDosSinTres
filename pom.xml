@@ -22,13 +22,6 @@
             <version>11.0.7</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>2.0.0-alpha5</version>
-        </dependency>
-
-
         <!-- Dependencia de Jetty Servlet -->
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
@@ -80,10 +73,21 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.3.1</version>
                 <configuration>
-                    <warName>NoHayDosSinTres</warName>
-                    <manifestEntries>
-                        <Main-Class>servidor.Servidor</Main-Class> <!-- Clase principal corregida -->
-                    </manifestEntries>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+
+            <!-- Plugin para empaquetar una aplicación ejecutable -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>servidor.Servidor</mainClass>
+                        </manifest>
+                    </archive>
                 </configuration>
             </plugin>
         </plugins>
