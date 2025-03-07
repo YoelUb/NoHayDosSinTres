@@ -7,14 +7,11 @@ import org.eclipse.jetty.servlet.ServletHolder;
 
 public class Servidor {
     public static void main(String[] args) {
-        // Obtener el puerto desde la variable de entorno PORT
-        String port = System.getenv("PORT");
-
-        // Si la variable de entorno no está configurada, usar el puerto 8080 por defecto
-        int serverPort = (port != null) ? Integer.parseInt(port) : 8080;
+        // Obtener el puerto desde la variable de entorno PORT (Render asigna el puerto dinámicamente)
+        int port = Integer.parseInt(System.getenv().getOrDefault("PORT", "8080"));
 
         // Crear el servidor en el puerto obtenido
-        Server server = new Server(serverPort);
+        Server server = new Server(port);
 
         // Configurar el contexto del servidor
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
@@ -33,7 +30,7 @@ public class Servidor {
         try {
             // Iniciar el servidor
             server.start();
-            System.out.println("Servidor iniciado en http://localhost:" + serverPort);
+            System.out.println("Servidor iniciado en http://0.0.0.0:" + port);
             server.join();
         } catch (Exception e) {
             e.printStackTrace();
