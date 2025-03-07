@@ -22,6 +22,13 @@
             <version>11.0.7</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>2.0.0-alpha5</version>
+        </dependency>
+
+
         <!-- Dependencia de Jetty Servlet -->
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
@@ -75,7 +82,7 @@
                 <configuration>
                     <warName>NoHayDosSinTres</warName>
                     <manifestEntries>
-                        <Main-Class>servidor.Main</Main-Class> <!-- Clase principal de tu aplicación -->
+                        <Main-Class>servidor.Servidor</Main-Class> <!-- Clase principal corregida -->
                     </manifestEntries>
                 </configuration>
             </plugin>
