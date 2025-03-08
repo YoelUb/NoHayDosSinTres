@@ -18,6 +18,6 @@
 
     <!-- Configuración del bienvenido -->
     <welcome-file-list>
-        <welcome-file>static/index.html</welcome-file>
+        <welcome-file>static/index.html</welcome-file>  <!-- 🔹 Alternativa si está en /static/ -->
     </welcome-file-list>
 </web-app>
