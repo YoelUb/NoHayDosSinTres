@@ -1,7 +1,7 @@
 async function eliminarUsuario(event) {
     event.preventDefault(); // Evita la recarga de la página
 
-    let id = document.getElementById("id").value.trim(); // ✅ Obtener y limpiar el ID
+    let id = document.getElementById("id").value.trim(); // ✅ Obtener ID
     if (id === "") {
         alert("Por favor, ingresa un ID válido.");
         return;
@@ -14,7 +14,7 @@ async function eliminarUsuario(event) {
     let url = `${baseURL}/FormularioServlet`;
 
     let datos = {
-        action: "delete", // 🔹 Indica que esta solicitud es para eliminar
+        action: "delete",  // 🔹 Identificamos que es una solicitud de eliminación
         id: id
     };
 
@@ -22,7 +22,7 @@ async function eliminarUsuario(event) {
         console.log(`🗑️ Enviando solicitud POST a: ${url} para eliminar usuario con ID: ${id}`);
 
         let respuesta = await fetch(url, {
-            method: "POST",  // 🔹 Ahora usamos POST en lugar de DELETE
+            method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(datos),
         });
