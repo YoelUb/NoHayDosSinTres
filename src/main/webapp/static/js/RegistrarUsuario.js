@@ -10,7 +10,7 @@ async function registrarUsuario(event) {
     let datos = { nombre: nombre };
 
     try {
-        let respuesta = await fetch("/FormularioServlet", {
+        let respuesta = await fetch('https://nohaydossintres.onrender.com/FormularioServlet', {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(datos)
