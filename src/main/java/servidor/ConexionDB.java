@@ -3,40 +3,43 @@ package servidor;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import io.github.cdimascio.dotenv.Dotenv;
 
 public class ConexionDB {
-    private static final Dotenv dotenv = Dotenv.load();  // Cargar el archivo .env
+    // Obtiene los valores desde las variables de entorno en Render
+    private static final String MYSQL_HOST = System.getenv("MYSQL_HOST");
+    private static final String MYSQL_PORT = System.getenv("MYSQL_PORT");
+    private static final String MYSQL_DATABASE = System.getenv("MYSQL_DATABASE");
+    private static final String MYSQL_USER = System.getenv("MYSQL_USER");
+    private static final String MYSQL_PASSWORD = System.getenv("MYSQL_PASSWORD");
 
-    static {
-        // 🔍 Verificar que las variables se están cargando correctamente
-        System.out.println("🔍 MYSQLHOST: " + dotenv.get("MYSQLHOST"));
-        System.out.println("🔍 MYSQLPORT: " + dotenv.get("MYSQLPORT"));
-        System.out.println("🔍 MYSQLDATABASE: " + dotenv.get("MYSQLDATABASE"));
-        System.out.println("🔍 MYSQLUSER: " + dotenv.get("MYSQLUSER"));
-        System.out.println("🔍 MYSQLPASSWORD: " + (dotenv.get("MYSQLPASSWORD") != null ? "********" : "NULL"));
-    }
-
-    private static final String MYSQLHOST = dotenv.get("MYSQLHOST");
-    private static final String MYSQLPORT = dotenv.get("MYSQLPORT");
-    private static final String MYSQLDATABASE = dotenv.get("MYSQLDATABASE");
-    private static final String MYSQLUSER = dotenv.get("MYSQLUSER");
-    private static final String MYSQLPASSWORD = dotenv.get("MYSQLPASSWORD");
-
-    private static final String URL = "jdbc:mysql://" + MYSQLHOST + ":" + MYSQLPORT + "/" + MYSQLDATABASE + "?useSSL=false&serverTimezone=UTC";
+    // Construcción de la URL de conexión
+    private static final String URL = "jdbc:mysql://" + MYSQL_HOST + ":" + MYSQL_PORT + "/" + MYSQL_DATABASE
+            + "?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
 
     public static Connection conectar() {
         Connection conexion = null;
         try {
             System.out.println("🔗 Intentando conectar a la base de datos...");
-            Class.forName("com.mysql.cj.jdbc.Driver"); // 🔹 Cargar driver de MySQL manualmente
-            conexion = DriverManager.getConnection(URL, MYSQLUSER, MYSQLPASSWORD);
-            System.out.println("✅ Conexión exitosa a la base de datos en Railway!");
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conexion = DriverManager.getConnection(URL, MYSQL_USER, MYSQL_PASSWORD);
+            System.out.println("✅ Conexión exitosa a la base de datos!");
         } catch (SQLException e) {
-            System.err.println("❌ Error al conectar a la base de datos: " + e.getMessage());
+            System.err.println("❌ Error SQL: " + e.getMessage());
         } catch (ClassNotFoundException e) {
-            System.err.println("❌ Driver de MySQL no encontrado: " + e.getMessage());
+            System.err.println("❌ Driver MySQL no encontrado: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("❌ Error desconocido: " + e.getMessage());
         }
         return conexion;
+    }
+
+    // Método para probar la conexión
+    public static void main(String[] args) {
+        Connection conn = conectar();
+        if (conn != null) {
+            System.out.println("🎉 La conexión fue exitosa en RENDER!");
+        } else {
+            System.out.println("⚠️ Fallo en la conexión.");
+        }
     }
 }

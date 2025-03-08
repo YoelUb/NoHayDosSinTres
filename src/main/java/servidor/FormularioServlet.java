@@ -30,11 +30,12 @@ public class FormularioServlet extends HttpServlet {
         while ((line = reader.readLine()) != null) {
             sb.append(line);
         }
+
         JSONObject jsonRequest = new JSONObject(sb.toString());
-        String nombre = jsonRequest.getString("nombre");
+        String nombre = jsonRequest.optString("nombre", "").trim();
 
         // Validar entrada
-        if (nombre == null || nombre.trim().isEmpty()) {
+        if (nombre.isEmpty()) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.getWriter().write("{\"error\": \"El nombre es obligatorio\"}");
             return;
@@ -42,7 +43,7 @@ public class FormularioServlet extends HttpServlet {
 
         // Insertar en la base de datos
         try (Connection con = ConexionDB.conectar()) {
-            String sql = "INSERT INTO usuarios (Nombre) VALUES (?)";
+            String sql = "INSERT INTO usuarios (nombre) VALUES (?)";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, nombre);
             int filasAfectadas = ps.executeUpdate();
@@ -62,7 +63,7 @@ public class FormularioServlet extends HttpServlet {
         }
     }
 
-    // Método para mostrar todos los usuarios (GET)
+    // 📌 Método para obtener todos los usuarios o uno por ID (GET)
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -72,15 +73,15 @@ public class FormularioServlet extends HttpServlet {
         try (Connection con = ConexionDB.conectar()) {
             if (idStr != null && !idStr.trim().isEmpty()) {
                 // 🔹 Buscar un usuario por ID
-                String sql = "SELECT * FROM usuarios WHERE ID = ?";
+                String sql = "SELECT * FROM usuarios WHERE id = ?";
                 PreparedStatement ps = con.prepareStatement(sql);
                 ps.setInt(1, Integer.parseInt(idStr));
                 ResultSet rs = ps.executeQuery();
 
                 if (rs.next()) {
                     JSONObject usuario = new JSONObject();
-                    usuario.put("id", rs.getInt("ID"));
-                    usuario.put("nombre", rs.getString("Nombre"));
+                    usuario.put("id", rs.getInt("id"));
+                    usuario.put("nombre", rs.getString("nombre"));
 
                     System.out.println("🔍 Usuario encontrado: " + usuario.toString());
                     response.getWriter().write(usuario.toString());
@@ -100,8 +101,8 @@ public class FormularioServlet extends HttpServlet {
 
                 while (rs.next()) {
                     JSONObject usuario = new JSONObject();
-                    usuario.put("id", rs.getInt("ID"));
-                    usuario.put("nombre", rs.getString("Nombre"));
+                    usuario.put("id", rs.getInt("id"));
+                    usuario.put("nombre", rs.getString("nombre"));
                     usuariosArray.put(usuario);
                 }
 
@@ -116,7 +117,7 @@ public class FormularioServlet extends HttpServlet {
         }
     }
 
-    // Método para eliminar un usuario por ID (DELETE)
+    // 📌 Método para eliminar un usuario por ID (DELETE)
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -129,7 +130,7 @@ public class FormularioServlet extends HttpServlet {
         }
 
         try (Connection con = ConexionDB.conectar()) {
-            String sql = "DELETE FROM usuarios WHERE ID = ?";
+            String sql = "DELETE FROM usuarios WHERE id = ?";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, Integer.parseInt(idStr));
             int filasAfectadas = ps.executeUpdate();
