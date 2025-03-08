@@ -27,6 +27,7 @@ async function registrarUsuario(event) {
             let resultado = await respuesta.json();
             alert(resultado.mensaje || "Usuario registrado correctamente.");
         } else {
+
             let texto = await respuesta.text();
             console.error("Respuesta no esperada:", texto);
             alert("Error inesperado en el servidor.");
