@@ -1,8 +1,6 @@
 package servidor;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,30 +16,18 @@ import org.json.JSONObject;
 @WebServlet("/FormularioServlet")
 public class FormularioServlet extends HttpServlet {
 
-    // 📌 Método para registrar un usuario (POST)
+    // MÉTODO POST: Registrar usuario
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        // Leer el JSON enviado por el JavaScript
-        StringBuilder sb = new StringBuilder();
-        BufferedReader reader = request.getReader();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            sb.append(line);
-        }
-
-        JSONObject jsonRequest = new JSONObject(sb.toString());
-        String nombre = jsonRequest.optString("nombre", "").trim();
-
-        // Validar entrada
-        if (nombre.isEmpty()) {
+        String nombre = request.getParameter("nombre");
+        if (nombre == null || nombre.trim().isEmpty()) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.getWriter().write("{\"error\": \"El nombre es obligatorio\"}");
             return;
         }
 
-        // Insertar en la base de datos
         try (Connection con = ConexionDB.conectar()) {
             String sql = "INSERT INTO usuarios (nombre) VALUES (?)";
             PreparedStatement ps = con.prepareStatement(sql);
@@ -57,67 +43,12 @@ public class FormularioServlet extends HttpServlet {
             }
             response.getWriter().write(jsonResponse.toString());
         } catch (SQLException e) {
-            e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("{\"error\": \"Error en la base de datos\"}");
         }
     }
 
-    // 📌 Método para obtener todos los usuarios o uno por ID (GET)
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-
-        String idStr = request.getParameter("id");
-
-        try (Connection con = ConexionDB.conectar()) {
-            if (idStr != null && !idStr.trim().isEmpty()) {
-                // 🔹 Buscar un usuario por ID
-                String sql = "SELECT * FROM usuarios WHERE id = ?";
-                PreparedStatement ps = con.prepareStatement(sql);
-                ps.setInt(1, Integer.parseInt(idStr));
-                ResultSet rs = ps.executeQuery();
-
-                if (rs.next()) {
-                    JSONObject usuario = new JSONObject();
-                    usuario.put("id", rs.getInt("id"));
-                    usuario.put("nombre", rs.getString("nombre"));
-
-                    System.out.println("🔍 Usuario encontrado: " + usuario.toString());
-                    response.getWriter().write(usuario.toString());
-
-                } else {
-                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                    response.getWriter().write("{\"error\": \"Usuario no encontrado\"}");
-                    System.out.println("⚠ Usuario con ID " + idStr + " no encontrado.");
-                }
-
-            } else {
-                // 🔹 Obtener todos los usuarios
-                JSONArray usuariosArray = new JSONArray();
-                String sql = "SELECT * FROM usuarios";
-                PreparedStatement ps = con.prepareStatement(sql);
-                ResultSet rs = ps.executeQuery();
-
-                while (rs.next()) {
-                    JSONObject usuario = new JSONObject();
-                    usuario.put("id", rs.getInt("id"));
-                    usuario.put("nombre", rs.getString("nombre"));
-                    usuariosArray.put(usuario);
-                }
-
-                System.out.println("🔍 Lista de usuarios enviada.");
-                response.getWriter().write(usuariosArray.toString());
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write("{\"error\": \"Error al obtener usuarios\"}");
-        }
-    }
-
-    // 📌 Método para eliminar un usuario por ID (DELETE)
+    // MÉTODO DELETE: Eliminar usuario
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -143,9 +74,7 @@ public class FormularioServlet extends HttpServlet {
                 jsonResponse.put("error", "Usuario no encontrado.");
             }
             response.getWriter().write(jsonResponse.toString());
-
         } catch (SQLException e) {
-            e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("{\"error\": \"Error al eliminar el usuario\"}");
         }

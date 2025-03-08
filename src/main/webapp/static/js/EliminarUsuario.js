@@ -7,32 +7,30 @@ async function eliminarUsuario(event) {
         return;
     }
 
-    // 🔹 Determinar la URL del servidor (local o en Render)
     let baseURL = window.location.origin.includes("localhost")
         ? "http://localhost:8080"
         : "https://nohaydossintres.onrender.com";
 
-    let url = `${baseURL}/FormularioServlet?id=${id}`;
+    let url = `${baseURL}/FormularioServlet`;
+
+    let datos = {
+        action: "delete", // 🔹 Indica que esta solicitud es para eliminar
+        id: id
+    };
 
     try {
-        console.log(`📡 Enviando solicitud DELETE a: ${url}`);
+        console.log(`🗑️ Enviando solicitud POST a: ${url} para eliminar usuario con ID: ${id}`);
 
         let respuesta = await fetch(url, {
-            method: "DELETE",
+            method: "POST",  // 🔹 Ahora usamos POST en lugar de DELETE
             headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(datos),
         });
 
-        let resultadoTexto = await respuesta.text(); // 🔹 Leer la respuesta como texto
+        let resultadoTexto = await respuesta.text();
         console.log("📌 Respuesta del servidor (RAW):", resultadoTexto);
 
-        let resultado;
-        try {
-            resultado = JSON.parse(resultadoTexto);
-        } catch (error) {
-            console.error("❌ Error al convertir JSON:", error);
-            alert("Error inesperado en el servidor. Verifica la consola.");
-            return;
-        }
+        let resultado = JSON.parse(resultadoTexto);
 
         if (respuesta.ok) {
             alert(resultado.mensaje || "✅ Usuario eliminado correctamente.");
@@ -40,7 +38,6 @@ async function eliminarUsuario(event) {
             alert(resultado.error || "❌ No se pudo eliminar el usuario.");
         }
 
-        // 🔄 Si `obtenerUsuarios` existe, actualizar la lista
         if (typeof obtenerUsuarios === "function") {
             console.log("🔄 Recargando lista de usuarios...");
             obtenerUsuarios();
@@ -58,6 +55,6 @@ document.addEventListener("DOMContentLoaded", function () {
     if (formEliminar) {
         formEliminar.addEventListener("submit", eliminarUsuario);
     } else {
-        console.error("⚠️ Formulario para eliminar usuario no encontrado en el DOM.");
+        console.error("⚠️ Formulario de eliminación no encontrado en el DOM.");
     }
 });
