@@ -8,7 +8,6 @@ RUN mvn clean package
 FROM jetty:11-jre11
 COPY --from=build /app/target/*.war /var/lib/jetty/webapps/ROOT.war
 COPY src/main/webapp/index.html /var/lib/jetty/webapps/ROOT/index.html
-COPY src/main/webapp/static/ /var/lib/jetty/webapps/ROOT/static/
 EXPOSE 8080
 CMD ["java", "-jar", "/usr/local/jetty/start.jar"]
 
