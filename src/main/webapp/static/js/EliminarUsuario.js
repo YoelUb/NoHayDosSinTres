@@ -1,27 +1,28 @@
+// 📌 Función para eliminar un usuario
 async function eliminarUsuario(event) {
-    event.preventDefault();
+    event.preventDefault(); // Evita la recarga de la página
 
-    let id = document.getElementById("id").value.trim();
+    let id = document.getElementById("idEliminar").value.trim();
+    console.log("🔍 ID capturado para eliminación:", id); // <-- Verifica si el ID se está capturando
+
     if (id === "") {
-        alert("Por favor, ingresa un ID válido.");
+        alert("⚠️ Por favor, ingresa un ID válido.");
         return;
     }
 
-    let baseURL = window.location.origin.includes("localhost")
-        ? "http://localhost:8080"
-        : "https://nohaydossintres.onrender.com";
-
-    let url = `${baseURL}/FormularioServlet?id=${id}`;
+    let url = `https://nohaydossintres.onrender.com/FormularioServlet?id=${id}`;
 
     try {
         let respuesta = await fetch(url, {
             method: "DELETE",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json" }
         });
 
         let resultadoTexto = await respuesta.text();
+        console.log("🔍 Respuesta del servidor:", resultadoTexto); // <-- Verificar qué devuelve la API
+
         if (!resultadoTexto || resultadoTexto.trim() === "") {
-            throw new Error("Respuesta vacía del servidor.");
+            throw new Error("❌ Respuesta vacía del servidor.");
         }
 
         let resultado = JSON.parse(resultadoTexto);
@@ -33,19 +34,19 @@ async function eliminarUsuario(event) {
         }
 
         if (typeof obtenerUsuarios === "function") {
-            obtenerUsuarios(); // Actualiza la lista de usuarios después de eliminar
+            obtenerUsuarios(); // Refrescar la lista después de eliminar
         }
 
     } catch (error) {
-        console.error("❌ Error en la solicitud:", error);
+        console.error("❌ Error en eliminarUsuario():", error);
         alert("Hubo un problema al eliminar el usuario.");
     }
 }
 
-// 📌 Asegurar que el evento se registre correctamente
+// 📌 Asegurar que el evento de eliminación se registre correctamente
 document.addEventListener("DOMContentLoaded", function () {
-    let btnEliminar = document.getElementById("btnEliminar");
-    if (btnEliminar) {
-        btnEliminar.addEventListener("click", eliminarUsuario);
+    let formEliminar = document.getElementById("formEliminar");
+    if (formEliminar) {
+        formEliminar.addEventListener("submit", eliminarUsuario);
     }
 });

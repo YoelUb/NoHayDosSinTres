@@ -1,21 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>NoHayDosSinTres - Dar de Baja un Invitado</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-    <header>
-        <h1>Dar de Baja un Invitado</h1>
-    </header>
-    <form id="formEliminar">
-        <label for="id">ID:</label>
-        <input type="text" id="id" name="id" required>
-        <button type="submit">Eliminar</button>
-    </form>
-    <script src="/static/js/EliminarUsuario.js" defer></script>
-    <br>
-        <a href="../../index.html" class="btn btn-secondary">Volver al Índice</a>
+<header>
+    <h1>Dar de Baja un Invitado</h1>
+</header>
+
+<!-- Formulario para eliminar un usuario -->
+<form id="formEliminar">
+    <label for="idEliminar">ID:</label>
+    <input type="text" id="idEliminar" name="idEliminar" required>
+    <button type="submit" id="btnEliminar">Eliminar</button>
+</form>
+
+<!-- Mostrar el ID capturado -->
+<p><strong>ID capturado:</strong> <span id="idCapturado">Ninguno</span></p>
+
+<br>
+<a href="../../index.html" class="btn btn-secondary">Volver al Índice</a>
+
+<!-- Script de eliminación -->
+<script src="https://nohaydossintres.onrender.com/static/js/EliminarUsuario.js" defer></script>
+
+<!-- Script para mostrar el ID en pantalla -->
+<script>
+    document.getElementById("idEliminar").addEventListener("input", function() {
+        document.getElementById("idCapturado").textContent = this.value;
+    });
+</script>
 </body>
 </html>
