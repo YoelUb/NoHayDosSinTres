@@ -3,7 +3,7 @@ async function obtenerUsuarios(event) {
     if (event) event.preventDefault(); // Evita la recarga de la página
 
     try {
-        let respuesta = await fetch("/FormularioServlet", {
+        let respuesta = await fetch("https://nohaydossintres.onrender.com/FormularioServlet", {
             method: "GET",
             headers: { "Content-Type": "application/json" }
         });
@@ -21,7 +21,7 @@ async function obtenerUsuarios(event) {
             usuarios = JSON.parse(usuariosTexto);
             console.log("🔍 Usuarios parseados:", usuarios);
         } catch (error) {
-            console.error("Error al convertir JSON:", error);
+            console.error("❌ Error al convertir JSON:", error);
             alert("Error en la respuesta del servidor. Verifica la consola.");
             return;
         }
@@ -30,7 +30,7 @@ async function obtenerUsuarios(event) {
         tablaUsuarios.innerHTML = ""; // Limpiar la tabla antes de agregar nuevos datos
 
         if (!usuarios || usuarios.length === 0) {
-            tablaUsuarios.innerHTML = `<tr><td colspan="2" class="text-center">No hay usuarios registrados.</td></tr>`;
+            tablaUsuarios.innerHTML = `<tr><td colspan="2" class="text-center">❌ No hay usuarios registrados.</td></tr>`;
             return;
         }
 
@@ -44,7 +44,7 @@ async function obtenerUsuarios(event) {
         });
 
     } catch (error) {
-        console.error("Error en obtenerUsuarios():", error);
+        console.error("❌ Error en obtenerUsuarios():", error);
         alert("Hubo un problema al obtener la lista de usuarios.");
     }
 }

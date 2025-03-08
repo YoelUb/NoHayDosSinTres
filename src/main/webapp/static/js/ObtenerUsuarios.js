@@ -2,14 +2,14 @@
 async function buscarUsuario(event) {
     event.preventDefault(); // Evita la recarga de la página
 
-    let id = document.getElementById("idBuscar").value;
-    if (id.trim() === "") {
+    let id = document.getElementById("idBuscar").value.trim();
+    if (id === "") {
         alert("Por favor, ingresa un ID válido.");
         return;
     }
 
     try {
-        let respuesta = await fetch(`/FormularioServlet?id=${id}`, {
+        let respuesta = await fetch(`https://nohaydossintres.onrender.com/FormularioServlet?id=${id}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" }
         });
@@ -27,7 +27,7 @@ async function buscarUsuario(event) {
             usuario = JSON.parse(resultadoTexto);
             console.log("🔍 Usuario parseado:", usuario);
         } catch (error) {
-            console.error("Error al convertir JSON:", error);
+            console.error("❌ Error al convertir JSON:", error);
             alert("Error en la respuesta del servidor. Verifica la consola.");
             return;
         }
@@ -35,17 +35,17 @@ async function buscarUsuario(event) {
         let resultadoBusqueda = document.getElementById("resultadoBusqueda");
 
         if (usuario.error) {
-            resultadoBusqueda.innerHTML = `<p style="color:red;">${usuario.error}</p>`;
+            resultadoBusqueda.innerHTML = `<p style="color:red;">❌ ${usuario.error}</p>`;
         } else {
             resultadoBusqueda.innerHTML = `
                 <div class="alert alert-success">
-                    <strong>ID:</strong> ${usuario.id} <br>
-                    <strong>Nombre:</strong> ${usuario.nombre}
+                    <strong>✅ ID:</strong> ${usuario.id} <br>
+                    <strong>👤 Nombre:</strong> ${usuario.nombre}
                 </div>`;
         }
 
     } catch (error) {
-        console.error("Error en buscarUsuario():", error);
+        console.error("❌ Error en buscarUsuario():", error);
         alert("Hubo un problema al buscar el usuario.");
     }
 }
