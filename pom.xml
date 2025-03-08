@@ -15,22 +15,28 @@
     </properties>
 
     <dependencies>
-        <!-- Dependencia de Jetty Server -->
+        <!-- 📌 Jetty Server -->
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
             <version>11.0.7</version>
-
         </dependency>
 
-        <!-- Dependencia de Jetty Servlet -->
+        <!-- 📌 Jetty Servlet -->
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-servlet</artifactId>
             <version>11.0.7</version>
         </dependency>
 
-        <!-- Dependencia de Jakarta Servlet -->
+        <!-- 📌 Jetty WebApp (Para manejar correctamente DELETE y otros métodos HTTP) -->
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-webapp</artifactId>
+            <version>11.0.7</version>
+        </dependency>
+
+        <!-- 📌 Jakarta Servlet API -->
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
@@ -38,44 +44,46 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Dependencia de JSON -->
+        <!-- 📌 JSON para manejar respuestas en formato JSON -->
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20210307</version>
         </dependency>
 
-        <!-- Dependencia de MySQL Connector -->
+        <!-- 📌 MySQL Connector -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.33</version>
+            <scope>runtime</scope>  <!-- 🔹 Evita que se empaquete en el WAR innecesariamente -->
         </dependency>
 
-        <!-- Dependencia de JUnit para pruebas -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.1</version>
-            <scope>test</scope>
-        </dependency>
-
+        <!-- 📌 Java Dotenv para gestionar variables de entorno -->
         <dependency>
             <groupId>io.github.cdimascio</groupId>
             <artifactId>java-dotenv</artifactId>
             <version>5.2.2</version>
         </dependency>
 
+        <!-- 📌 JUnit para pruebas -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.1</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
+
     <build>
         <plugins>
-            <!-- Plugin para generar el WAR con Main-Class -->
+            <!-- 📌 Plugin para empaquetar como WAR -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.3.1</version>
                 <configuration>
-                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>  <!-- 🔹 No requiere web.xml -->
                     <archive>
                         <manifestEntries>
                             <Main-Class>servidor.Servidor</Main-Class>
@@ -83,8 +91,23 @@
                     </archive>
                 </configuration>
             </plugin>
+
+            <!-- 📌 Jetty Plugin para manejar correctamente los métodos HTTP -->
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>11.0.7</version>
+                <configuration>
+                    <webApp>
+                        <contextPath>/</contextPath>
+                    </webApp>
+                    <httpConfiguration>
+                        <customizer>
+                            <class>org.eclipse.jetty.server.CustomRequestLog</class>
+                        </customizer>
+                    </httpConfiguration>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
-
-
 </project>
