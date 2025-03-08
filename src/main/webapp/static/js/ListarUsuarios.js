@@ -8,6 +8,7 @@ async function obtenerUsuarios(event) {
             headers: { "Content-Type": "application/json" }
         });
 
+
         // 🔹 Verificar si la respuesta es exitosa
         if (!respuesta.ok) {
             throw new Error(`HTTP error! Status: ${respuesta.status}`);

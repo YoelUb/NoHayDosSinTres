@@ -1,54 +1,54 @@
-// 📌 Función para buscar un usuario por ID
-async function buscarUsuario(event) {
-    event.preventDefault(); // Evita la recarga de la página
-
-    let id = document.getElementById("idBuscar").value.trim();
-    if (id === "") {
-        alert("Por favor, ingresa un ID válido.");
-        return;
-    }
+// 📌 Función para obtener y mostrar todos los usuarios en la tabla
+async function obtenerUsuarios(event) {
+    if (event) event.preventDefault(); // Evita la recarga de la página
 
     try {
-        let respuesta = await fetch(`https://nohaydossintres.onrender.com/FormularioServlet?id=${id}`, {
+        let respuesta = await fetch("https://nohaydossintres.onrender.com/FormularioServlet", {
             method: "GET",
             headers: { "Content-Type": "application/json" }
         });
 
-        // 🔹 Verificar si la respuesta es exitosa
         if (!respuesta.ok) {
             throw new Error(`HTTP error! Status: ${respuesta.status}`);
         }
 
-        let resultadoTexto = await respuesta.text();
-        if (!resultadoTexto || resultadoTexto.trim() === "") {
-            throw new Error("Respuesta vacía del servidor.");
+        let usuariosTexto = await respuesta.text();
+        console.log("🔍 Respuesta RAW del servidor:", usuariosTexto);
+
+        if (!usuariosTexto || usuariosTexto.trim() === "") {
+            throw new Error("❌ Respuesta vacía del servidor.");
         }
 
-        let usuario = JSON.parse(resultadoTexto);
-        console.log("🔍 Usuario encontrado:", usuario);
+        let usuarios = JSON.parse(usuariosTexto);
+        console.log("✅ Usuarios obtenidos:", usuarios);
 
-        let resultadoBusqueda = document.getElementById("resultadoBusqueda");
+        let tablaUsuarios = document.getElementById("tablaUsuarios");
+        tablaUsuarios.innerHTML = ""; // Limpiar la tabla antes de agregar nuevos datos
 
-        if (usuario.error) {
-            resultadoBusqueda.innerHTML = `<p style="color:red;">❌ ${usuario.error}</p>`;
-        } else {
-            resultadoBusqueda.innerHTML = `
-                <div class="alert alert-success">
-                    <strong>✅ ID:</strong> ${usuario.id} <br>
-                    <strong>👤 Nombre:</strong> ${usuario.nombre}
-                </div>`;
+        if (!usuarios || usuarios.length === 0) {
+            tablaUsuarios.innerHTML = `<tr><td colspan="2" class="text-center">❌ No hay usuarios registrados.</td></tr>`;
+            return;
         }
+
+        usuarios.forEach(usuario => {
+            let fila = document.createElement("tr");
+            fila.innerHTML = `
+                <td>${usuario.id}</td>
+                <td>${usuario.nombre}</td>
+            `;
+            tablaUsuarios.appendChild(fila);
+        });
 
     } catch (error) {
-        console.error("❌ Error en buscarUsuario():", error);
-        alert("Hubo un problema al buscar el usuario.");
+        console.error("❌ Error en obtenerUsuarios():", error);
+        alert("Hubo un problema al obtener la lista de usuarios.");
     }
 }
 
-// 📌 Asegurar que el evento de búsqueda se registre correctamente
+// 📌 Asegurar que los eventos se registren correctamente
 document.addEventListener("DOMContentLoaded", function () {
-    let formBuscar = document.getElementById("formBuscar");
-    if (formBuscar) {
-        formBuscar.addEventListener("submit", buscarUsuario);
+    let btnObtenerUsuarios = document.getElementById("btnObtenerUsuarios");
+    if (btnObtenerUsuarios) {
+        btnObtenerUsuarios.addEventListener("click", obtenerUsuarios);
     }
 });

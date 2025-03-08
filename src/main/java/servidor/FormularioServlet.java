@@ -62,7 +62,7 @@ public class FormularioServlet extends HttpServlet {
         }
     }
 
-    // 📌 Método GET: Listar usuarios o buscar usuario por ID
+    // Método GET: Listar usuarios o buscar usuario por ID
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
