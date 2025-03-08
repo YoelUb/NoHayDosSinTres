@@ -17,7 +17,7 @@ import org.json.JSONObject;
 @WebServlet("/FormularioServlet")
 public class FormularioServlet extends HttpServlet {
 
-    // 📌 Método POST: Registrar usuario o eliminar usuario
+    // 📌 Método POST: Registrar usuario
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -30,71 +30,35 @@ public class FormularioServlet extends HttpServlet {
         }
 
         JSONObject jsonRequest = new JSONObject(sb.toString());
-        String action = jsonRequest.optString("action", ""); // 🔹 Acción esperada (insert/delete)
+        String nombre = jsonRequest.optString("nombre", "").trim();
         JSONObject jsonResponse = new JSONObject();
 
-        if ("delete".equals(action)) {
-            // 🔹 Manejar eliminación de usuario
-            int id = jsonRequest.optInt("id", -1);
+        if (nombre.isEmpty()) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            jsonResponse.put("error", "⚠ El nombre es obligatorio.");
+            response.getWriter().write(jsonResponse.toString());
+            return;
+        }
 
-            if (id == -1) {
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                jsonResponse.put("error", "ID inválido para eliminación.");
-                response.getWriter().write(jsonResponse.toString());
-                return;
-            }
+        try (Connection con = ConexionDB.conectar()) {
+            String sql = "INSERT INTO usuarios (Nombre) VALUES (?)";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, nombre);
+            int filasAfectadas = ps.executeUpdate();
 
-            try (Connection con = ConexionDB.conectar()) {
-                String sql = "DELETE FROM usuarios WHERE id = ?";
-                PreparedStatement ps = con.prepareStatement(sql);
-                ps.setInt(1, id);
-                int filasAfectadas = ps.executeUpdate();
-
-                if (filasAfectadas > 0) {
-                    jsonResponse.put("mensaje", "✅ Usuario eliminado correctamente.");
-                } else {
-                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                    jsonResponse.put("error", "⚠ Usuario no encontrado.");
-                }
-                response.getWriter().write(jsonResponse.toString());
-
-            } catch (SQLException e) {
-                e.printStackTrace();
+            if (filasAfectadas > 0) {
+                jsonResponse.put("mensaje", "✅ Usuario registrado correctamente.");
+            } else {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                jsonResponse.put("error", "❌ Error en la base de datos al eliminar el usuario.");
-                response.getWriter().write(jsonResponse.toString());
+                jsonResponse.put("error", "❌ No se pudo registrar el usuario.");
             }
+            response.getWriter().write(jsonResponse.toString());
 
-        } else {
-            // 🔹 Registrar usuario si no es eliminación
-            String nombre = jsonRequest.optString("nombre", "").trim();
-            if (nombre.isEmpty()) {
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                jsonResponse.put("error", "⚠ El nombre es obligatorio.");
-                response.getWriter().write(jsonResponse.toString());
-                return;
-            }
-
-            try (Connection con = ConexionDB.conectar()) {
-                String sql = "INSERT INTO usuarios (nombre) VALUES (?)";
-                PreparedStatement ps = con.prepareStatement(sql);
-                ps.setString(1, nombre);
-                int filasAfectadas = ps.executeUpdate();
-
-                if (filasAfectadas > 0) {
-                    jsonResponse.put("mensaje", "✅ Usuario registrado correctamente.");
-                } else {
-                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                    jsonResponse.put("error", "❌ No se pudo registrar el usuario.");
-                }
-                response.getWriter().write(jsonResponse.toString());
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                jsonResponse.put("error", "❌ Error en la base de datos.");
-                response.getWriter().write(jsonResponse.toString());
-            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            jsonResponse.put("error", "❌ Error en la base de datos.");
+            response.getWriter().write(jsonResponse.toString());
         }
     }
 
@@ -109,15 +73,15 @@ public class FormularioServlet extends HttpServlet {
         try (Connection con = ConexionDB.conectar()) {
             if (idStr != null && !idStr.trim().isEmpty()) {
                 // 🔹 Buscar un usuario por ID
-                String sql = "SELECT * FROM usuarios WHERE id = ?";
+                String sql = "SELECT * FROM usuarios WHERE ID = ?";
                 PreparedStatement ps = con.prepareStatement(sql);
                 ps.setInt(1, Integer.parseInt(idStr));
                 ResultSet rs = ps.executeQuery();
 
                 if (rs.next()) {
                     JSONObject usuario = new JSONObject();
-                    usuario.put("id", rs.getInt("id"));
-                    usuario.put("nombre", rs.getString("nombre"));
+                    usuario.put("id", rs.getInt("ID"));
+                    usuario.put("nombre", rs.getString("Nombre"));
 
                     System.out.println("🔍 Usuario encontrado: " + usuario.toString());
                     response.getWriter().write(usuario.toString());
@@ -138,8 +102,8 @@ public class FormularioServlet extends HttpServlet {
 
                 while (rs.next()) {
                     JSONObject usuario = new JSONObject();
-                    usuario.put("id", rs.getInt("id"));
-                    usuario.put("nombre", rs.getString("nombre"));
+                    usuario.put("id", rs.getInt("ID"));
+                    usuario.put("nombre", rs.getString("Nombre"));
                     usuariosArray.put(usuario);
                 }
 
@@ -151,6 +115,43 @@ public class FormularioServlet extends HttpServlet {
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             jsonResponse.put("error", "❌ Error al obtener usuarios.");
+            response.getWriter().write(jsonResponse.toString());
+        }
+    }
+
+    // 📌 Método DELETE: Eliminar usuario por ID
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        String idStr = request.getParameter("id");
+        JSONObject jsonResponse = new JSONObject();
+
+        if (idStr == null || idStr.trim().isEmpty()) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            jsonResponse.put("error", "⚠ ID inválido para eliminación.");
+            response.getWriter().write(jsonResponse.toString());
+            return;
+        }
+
+        try (Connection con = ConexionDB.conectar()) {
+            String sql = "DELETE FROM usuarios WHERE ID = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, Integer.parseInt(idStr));
+            int filasAfectadas = ps.executeUpdate();
+
+            if (filasAfectadas > 0) {
+                jsonResponse.put("mensaje", "✅ Usuario eliminado correctamente.");
+            } else {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                jsonResponse.put("error", "⚠ Usuario no encontrado.");
+            }
+            response.getWriter().write(jsonResponse.toString());
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            jsonResponse.put("error", "❌ Error en la base de datos al eliminar el usuario.");
             response.getWriter().write(jsonResponse.toString());
         }
     }

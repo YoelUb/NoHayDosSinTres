@@ -14,17 +14,12 @@ async function obtenerUsuarios(event) {
         }
 
         let usuariosTexto = await respuesta.text();
-        console.log("🔍 Respuesta obtenida (RAW):", usuariosTexto);
-
-        let usuarios;
-        try {
-            usuarios = JSON.parse(usuariosTexto);
-            console.log("🔍 Usuarios parseados:", usuarios);
-        } catch (error) {
-            console.error("❌ Error al convertir JSON:", error);
-            alert("Error en la respuesta del servidor. Verifica la consola.");
-            return;
+        if (!usuariosTexto || usuariosTexto.trim() === "") {
+            throw new Error("Respuesta vacía del servidor.");
         }
+
+        let usuarios = JSON.parse(usuariosTexto);
+        console.log("🔍 Usuarios obtenidos:", usuarios);
 
         let tablaUsuarios = document.getElementById("tablaUsuarios");
         tablaUsuarios.innerHTML = ""; // Limpiar la tabla antes de agregar nuevos datos

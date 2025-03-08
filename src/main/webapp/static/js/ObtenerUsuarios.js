@@ -20,17 +20,12 @@ async function buscarUsuario(event) {
         }
 
         let resultadoTexto = await respuesta.text();
-        console.log("🔍 Respuesta obtenida (RAW):", resultadoTexto); // 🔹 Ver respuesta antes de parsearla
-
-        let usuario;
-        try {
-            usuario = JSON.parse(resultadoTexto);
-            console.log("🔍 Usuario parseado:", usuario);
-        } catch (error) {
-            console.error("❌ Error al convertir JSON:", error);
-            alert("Error en la respuesta del servidor. Verifica la consola.");
-            return;
+        if (!resultadoTexto || resultadoTexto.trim() === "") {
+            throw new Error("Respuesta vacía del servidor.");
         }
+
+        let usuario = JSON.parse(resultadoTexto);
+        console.log("🔍 Usuario encontrado:", usuario);
 
         let resultadoBusqueda = document.getElementById("resultadoBusqueda");
 
