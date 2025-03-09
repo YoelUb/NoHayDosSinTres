@@ -13,11 +13,15 @@ NoHayDosSinTres es una aplicación web desarrollada en **Java, JSP y Maven**, di
 
 ## Diagrama de UML
 
-![ConexionDB.svg](docs/Arquitectura-UML/ConexionDB.svg)
 
-![Servidor.svg](docs/Arquitectura-UML/Servidor.svg)
+![Diagrama Servidor](docs/Arquitectura-UML/Servidor.png)
 
-![FormularioServerlet.svg](docs/Arquitectura-UML/FormularioServerlet.svg)
+
+![Diagrama ConexionDB](docs/Arquitectura-UML/ConexionDB.png)
+
+
+![Diagrama FormularioServlet](docs/Arquitectura-UML/FormularioServerlet.png)
+
 
 ## Instalación y Configuración
 
