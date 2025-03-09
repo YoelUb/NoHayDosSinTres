@@ -11,6 +11,14 @@ NoHayDosSinTres es una aplicación web desarrollada en **Java, JSP y Maven**, di
 - **Render Web Service** para el despliegue
 - **Docker** para la contenedorización
 
+## Diagrama de UML
+
+![ConexionDB.svg](docs/Arquitectura-UML/ConexionDB.svg)
+
+![Servidor.svg](docs/Arquitectura-UML/Servidor.svg)
+
+![FormularioServerlet.svg](docs/Arquitectura-UML/FormularioServerlet.svg)
+
 ## Instalación y Configuración
 
 ### 1. Clonar el Repositorio

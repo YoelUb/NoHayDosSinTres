@@ -1,0 +1,56 @@
+@startuml
+class FormularioServlet {
+    + void doPost(HttpServletRequest request, HttpServletResponse response)
+    + void doGet(HttpServletRequest request, HttpServletResponse response)
+    + void doDelete(HttpServletRequest request, HttpServletResponse response)
+}
+
+class ConexionDB {
+    + static Connection conectar()
+}
+
+class Connection {
+    + PreparedStatement prepareStatement(String sql)
+    + void close()
+}
+
+class PreparedStatement {
+    + void setInt(int parameterIndex, int value)
+    + void setString(int parameterIndex, String value)
+    + ResultSet executeQuery()
+    + int executeUpdate()
+    + void close()
+}
+
+class ResultSet {
+    + boolean next()
+    + int getInt(String columnLabel)
+    + String getString(String columnLabel)
+    + void close()
+}
+
+class HttpServletRequest {
+    + String getParameter(String name)
+    + BufferedReader getReader()
+}
+
+class HttpServletResponse {
+    + void setContentType(String type)
+    + void setCharacterEncoding(String charset)
+    + void setStatus(int status)
+    + PrintWriter getWriter()
+}
+
+class PrintWriter {
+    + void write(String s)
+}
+
+FormularioServlet --> HttpServletRequest
+FormularioServlet --> HttpServletResponse
+FormularioServlet --> ConexionDB
+ConexionDB --> Connection
+Connection --> PreparedStatement
+PreparedStatement --> ResultSet
+HttpServletResponse --> PrintWriter
+JSONArray --> JSONObject
+@enduml

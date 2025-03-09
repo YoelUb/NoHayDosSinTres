@@ -1,0 +1,23 @@
+@startuml
+class ConexionDB {
+    - static final String MYSQL_HOST
+    - static final String MYSQL_PORT
+    - static final String MYSQL_DATABASE
+    - static final String MYSQL_USER
+    - static final String MYSQL_PASSWORD
+    - static final String URL
+    + static Connection conectar()
+    + static void main(String[] args)
+}
+
+class DriverManager {
+    + static Connection getConnection(String url, String user, String password)
+}
+
+class Connection {
+    + void close()
+}
+
+ConexionDB --> DriverManager
+ConexionDB --> Connection
+@enduml

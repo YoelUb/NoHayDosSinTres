@@ -1,0 +1,31 @@
+@startuml
+class Servidor {
+    + static void main(String[] args) throws Exception
+}
+
+class Server {
+    + Server(int port)
+    + void setHandler(Handler handler)
+    + void start()
+    + void join()
+}
+
+class ServletContextHandler {
+    + ServletContextHandler(int options)
+    + void setContextPath(String path)
+    + void setBaseResource(Resource base)
+    + void addServlet(Class servlet, String pathSpec)
+}
+
+class DefaultServlet {
+}
+
+class Resource {
+    + static Resource newResource(String uri)
+}
+
+Servidor --> Server
+Servidor --> ServletContextHandler
+ServletContextHandler --> DefaultServlet
+ServletContextHandler --> Resource
+@enduml
