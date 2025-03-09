@@ -1,0 +1,79 @@
+body {
+    background: linear-gradient(to bottom, #2e7d32, #1b5e20) fixed;
+    color: white;
+    font-family: "Times New Roman", sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+form {
+    width: 300px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    margin: 50px auto;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid white;
+    border-radius: 5px;
+    text-align: center;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    background: #388e3c;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: transform 0.2s ease, background 0.3s ease;
+}
+
+button:hover {
+    background: #2e7d32;
+    transform: scale(1.05);
+}
+
+#resultadoBusqueda {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: yellow;
+}
+
+a.btn-secondary {
+    display: inline-block;
+    width: auto;
+    padding: 10px 20px;
+    margin-top: 20px;
+    font-size: 16px;
+    background: gray;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: transform 0.2s ease, background 0.3s ease;
+}
+
+a.btn-secondary:hover {
+    background: darkgray;
+    transform: scale(1.05);
+}

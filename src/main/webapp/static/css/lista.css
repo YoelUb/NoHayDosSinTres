@@ -1,0 +1,85 @@
+body {
+    background: linear-gradient(to bottom, #2e7d32, #1b5e20) fixed;
+    color: white;
+    font-family: "Times New Roman", sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+thead {
+    background: rgba(255, 255, 255, 0.3);
+    color: black;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid white;
+}
+
+tbody tr:nth-child(odd) {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+button, a.btn {
+    display: inline-block;
+    width: auto;
+    padding: 10px 20px;
+    margin-top: 10px;
+    font-size: 16px;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.3s ease;
+    border-radius: 5px;
+}
+
+.btn-primary {
+    background: #388e3c;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #2e7d32;
+    transform: scale(1.05);
+}
+
+.btn-secondary {
+    background: gray;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: darkgray;
+    transform: scale(1.05);
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+a:hover {
+    text-decoration: underline;
+}
