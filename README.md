@@ -3,6 +3,8 @@
 ## Descripción
 NoHayDosSinTres es una aplicación web desarrollada en **Java, JSP y Maven**, diseñada para gestionar los invitados de un evento. La aplicación permite a los organizadores registrar, modificar y eliminar invitados, así como visualizar detalles clave en una interfaz amigable.
 
+Link al repositorio: https://github.com/YoelUb/NoHayDosSinTres
+
 ## Tecnologías Utilizadas
 - **Java (JSP & Servlets)**
 - **Maven** para la gestión de dependencias
@@ -27,7 +29,7 @@ NoHayDosSinTres es una aplicación web desarrollada en **Java, JSP y Maven**, di
 
 ### 1. Clonar el Repositorio
 ```sh
-git clone https://github.com/usuario/NoHayDosSinTres.git
+git clone https://github.com/YoelUb/NoHayDosSinTres
 cd NoHayDosSinTres
 
 # Configurar el Archivo pom.xml
